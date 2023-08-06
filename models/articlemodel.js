@@ -19,7 +19,7 @@ const articleSchema = mongoose.Schema(
 
     like: {
       type: Number,
-      default: 0,
+      default: 25,
     },
   },
   {

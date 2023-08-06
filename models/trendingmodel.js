@@ -12,6 +12,10 @@ const trendingSchema = mongoose.Schema(
       required: [true, "Please add description"],
     },
 
+    token: {
+      type: String,
+    },
+
     viewcount: {
       type: Number,
       default: 0,

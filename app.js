@@ -28,13 +28,22 @@ app.get("/api/article/all", async (req, res) => {
 app.get("/api/article/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const article = await Articll.findById({ id });
+    const article = await Articll.findById(id);
     res.status(200).json(article);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
-app.get("/api/article/trending", async (req, res) => {
+app.post("/api/article/trending", async (req, res) => {
+  try {
+    const trend = await trends.create(req.body);
+    res.status(200).json(trend);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ message: error.message });
+  }
+});
+app.get("/api/article/trending/all", async (req, res) => {
   try {
     const trendings = await trends.find({});
     res.status(200).json(trendings);
@@ -72,7 +81,19 @@ app.delete("/api/article/:id", async (req, res) => {
 
 app.delete("/api/article/:id/like", async (req, res) => {});
 
-app.post("/api/article/:id/like", async (req, res) => {});
+app.post("/api/article/:id/like", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const article = await Articll.findByIdAndUpdate(id, req.body);
+    if (!article) {
+      return res.status(404).json({ message: "Article not found " });
+    }
+    const updatedArticle = await Articll.findById(id);
+    res.status(200).json(updatedArticle);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
 
 mongoose
   .connect(
